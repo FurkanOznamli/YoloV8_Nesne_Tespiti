@@ -3,59 +3,58 @@
 
 ## 🖼 Proje Önizlemesi
 
-(👉 Buraya PyQt5 arayüzünün ekran görüntüsünü ekleyebilirsin)
+<img width="1918" height="1018" alt="image" src="https://github.com/user-attachments/assets/da3526ec-dcbf-4e84-889a-30f4e43487c4" />
+
 
 ---
 
 ## 🎯 Projenin Amacı
 
-Bu projede, derin öğrenme tabanlı nesne tespiti algoritmalarından **YOLOv8** kullanılarak,
-gerçek görüntüler üzerinde **kutu** ve **şişe** nesnelerinin tespit edilmesi amaçlanmıştır.
+Bu projede, derin öğrenme tabanlı nesne tespiti algoritmalarından YOLOv8 kullanılarak,
+gerçek görüntüler üzerinde kutu ve şişe nesnelerinin tespit edilmesi amaçlanmıştır.
 
 Proje kapsamında:
+- İki sınıflı (kutu – şişe) özel bir görüntü veri seti oluşturulmuştur
+- Görüntüler YOLO formatında etiketlenmiştir
+- YOLOv8 modeli Google Colab ortamında eğitilmiştir
+- Eğitilen model PyQt5 tabanlı bir masaüstü uygulamasına entegre edilmiştir
 
-1️⃣ İki sınıflı (kutu – şişe) özel bir görüntü veri seti oluşturuldu  
-2️⃣ Görüntüler YOLO formatında etiketlendi  
-3️⃣ YOLOv8 modeli Google Colab ortamında eğitildi  
-4️⃣ Eğitilen model, **PyQt5 tabanlı bir masaüstü arayüzüne** entegre edildi  
-
-Tüm eğitim süreci ve model parametreleri `.ipynb` dosyasında açıklamalı şekilde gösterilmiştir.
+Tüm eğitim süreci ve model ayarları ipynb dosyasında açıklamalı şekilde gösterilmiştir.
 
 ---
 
 ## 1️⃣ Veri Seti Hazırlığı
 
-📌 **Sınıflar**
+### Sınıflar
 
-Bu projede iki sınıf bulunmaktadır:
+Bu projede iki adet sınıf bulunmaktadır:
+- kutu
+- sise
 
-- `kutu`
-- `sise`
+### Veri Seti Özellikleri
 
-📌 **Veri Seti Özellikleri**
+- Görüntüler tarafımca oluşturulmuştur
+- Dosya formatı: jpg
+- Etiketleme işlemi LabelImg aracı kullanılarak yapılmıştır
+- YOLO formatında .txt etiket dosyaları üretilmiştir
 
-- Görüntüler tarafımca çekilmiştir
-- Dosya formatı: `jpg`
-- Etiketleme işlemi **LabelImg** aracı kullanılarak yapılmıştır
-- YOLO formatında `.txt` etiket dosyaları oluşturulmuştur
-- Sınıf indeksleri:
-  - `0 → kutu`
-  - `1 → sise`
+Sınıf indeksleri:
+- 0 → kutu
+- 1 → sise
 
-📌 **Veri Bölünmesi**
+### Veri Bölünmesi
 
 Veri seti aşağıdaki şekilde ayrılmıştır:
+- Train (Eğitim)
+- Val (Doğrulama)
 
-- **Train (Eğitim)**
-- **Val (Doğrulama)**
-
-Bu ayrım, modelin ezber yapmadan genelleme yeteneğini ölçmek için yapılmıştır.
+Bu ayrım, modelin genelleme yeteneğini ölçmek amacıyla yapılmıştır.
 
 ---
 
 ## 2️⃣ YOLO Formatı ve YAML Dosyası
 
-Model eğitimi için `data.yaml` dosyası oluşturulmuştur.
+Model eğitimi için data.yaml dosyası oluşturulmuştur.
 
 Bu dosyada:
 - Eğitim ve doğrulama veri yolları
@@ -64,25 +63,26 @@ Bu dosyada:
 
 tanımlanmıştır.
 
-Bu yapı, YOLOv8’in veri setini doğru şekilde okuyabilmesi için zorunludur.
+Bu yapı, YOLOv8 modelinin veri setini doğru şekilde okuyabilmesi için zorunludur.
 
 ---
 
 ## 3️⃣ Model Eğitimi (YOLOv8)
 
-📌 **Kullanılan Model**
+### Kullanılan Model
 
-- Model: **YOLOv8n (Nano)**
-- Framework: **Ultralytics YOLOv8**
-- Eğitim ortamı: **Google Colab (GPU)**
+- Model: YOLOv8n (Nano)
+- Framework: Ultralytics YOLOv8
+- Eğitim ortamı: Google Colab (GPU)
 
-📌 **Eğitim Parametreleri**
+### Eğitim Parametreleri
 
-- Epoch: **50**
-- Image size: **640 × 640**
-- Batch size: **8**
+- Epoch: 50
+- Görüntü boyutu: 640x640
+- Batch size: 8
 
-```python
+Eğitim kodu:
+
 from ultralytics import YOLO
 
 model = YOLO("yolov8n.pt")
@@ -95,70 +95,74 @@ model.train(
     device=0,
     name="kutu_sise_yolo"
 )
-📌 Eğitim Sonuçları
 
-Epoch ilerledikçe loss değerlerinde düşüş gözlemlenmiştir
+### Eğitim Sonuçları
 
-Modelin nesneleri doğru konumlandırabildiği görülmüştür
+- Eğitim süresince loss değerlerinde düşüş gözlemlenmiştir
+- Model, kutu ve şişe nesnelerini başarılı şekilde tespit edebilmiştir
+- En iyi performansa sahip model ağırlıkları best.pt dosyası olarak kaydedilmiştir
 
-En iyi performansa sahip ağırlıklar best.pt olarak kaydedilmiştir
+---
 
-(👉 Buraya training grafikleri eklenebilir)
+## 4️⃣ PyQt5 Masaüstü Uygulaması
 
-4️⃣ PyQt5 Masaüstü Uygulaması
-Eğitilen YOLOv8 modeli, PyQt5 kullanılarak geliştirilen bir GUI uygulamasına entegre edilmiştir.
+Eğitilen YOLOv8 modeli, PyQt5 kullanılarak geliştirilen bir masaüstü uygulamasına entegre edilmiştir.
 
-📌 Uygulama Özellikleri
+### Uygulama Özellikleri
 
-Görüntü yükleme
+- Görüntü yükleme
+- YOLOv8 ile nesne tespiti
+- Bounding box çizimi
+- Sonuç görüntüsünü kaydetme
+- Kullanıcı dostu arayüz
 
-YOLOv8 ile nesne tespiti
+### Kullanıcı Akışı
 
-Bounding box çizimi
+1. Kullanıcı görüntüyü seçer
+2. Test Image butonuna basılır
+3. Model görüntüyü analiz eder
+4. Tespit edilen nesneler bounding box ile gösterilir
 
-Tespit edilen görüntüyü kaydetme
+---
 
-Kullanıcı dostu arayüz
+## 📁 Proje Dosya Yapısı
 
-📌 Kullanıcı Akışı
-
-1️⃣ Görsel seçilir
-2️⃣ “Test Image” butonu ile model çalıştırılır
-3️⃣ Kutu ve şişeler tespit edilir
-4️⃣ Sonuç görseli ekranda gösterilir
-
-📁 Proje Dosya Yapısı
-bash
-Kodu kopyala
 YOLO_GUI/
-├── gui_app.py               # PyQt5 GUI uygulaması
-├── Yolo_NesneTespiti.ipynb  # Model eğitimi (Colab)
-├── best.pt                  # Eğitilmiş YOLOv8 modeli
-├── README.md                # Proje açıklaması
-▶️ Uygulamayı Çalıştırma
-Gerekli kütüphaneler kurulduktan sonra aşağıdaki komut ile uygulama çalıştırılabilir:
+├── gui_app.py
+├── Yolo_NesneTespiti.ipynb
+├── best.pt
+├── README.md
 
-bash
-Kodu kopyala
+---
+
+## ▶️ Uygulamayı Çalıştırma
+
+Uygulama aşağıdaki komut ile çalıştırılır:
+
 python gui_app.py
-🛠️ Kullanılan Teknolojiler
-Python 3.10
 
-YOLOv8 (Ultralytics)
+---
 
-PyTorch
+## 🛠️ Kullanılan Teknolojiler
 
-OpenCV
+- Python 3.10
+- YOLOv8 (Ultralytics)
+- PyTorch
+- OpenCV
+- PyQt5
+- Google Colab (GPU)
 
-PyQt5
+---
 
-Google Colab (GPU)
+## 📊 Genel Değerlendirme
 
-📊 Genel Değerlendirme
-Bu projede, CNN tabanlı YOLOv8 algoritması kullanılarak iki sınıflı bir nesne tespit sistemi başarıyla geliştirilmiştir.
+Bu projede CNN tabanlı YOLOv8 algoritması kullanılarak iki sınıflı bir nesne tespit sistemi geliştirilmiştir.
 Modelin PyQt5 tabanlı bir masaüstü arayüzü ile sunulması, projenin uygulama odaklı ve kullanıcı dostu olmasını sağlamıştır.
 
-Proje, hem derin öğrenme hem de yazılım geliştirme süreçlerini birlikte içeren kapsamlı bir çalışmadır.
+---
 
-👤 Geliştirici
-Nahit Furkan Öznamlı
+## 👤 Geliştirici
+
+Nahit Furkan Öznamlı  
+Okul No: 2212721020  
+
